@@ -16,7 +16,7 @@ const registerUser = asyncHandler(async (req, res) => {
         console.log(err.message);
       });
   }
-  res.status(200).send({ message: "resopnse" });
+  res.status(200).send({ message: "otp sent successfully" });
 });
 
 export { registerUser };
