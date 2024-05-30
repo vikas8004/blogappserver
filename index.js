@@ -12,5 +12,3 @@ app.listen(PORT, () => {
       console.log(err.message);
     });  
 });
-
-// console.log(process.env.PORT);
