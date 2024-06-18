@@ -3,8 +3,10 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import formatFile from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
+import CustomError from "../utils/customError.js";
 const createPost = asyncHandler(async (req, res) => {
   const { title, description, category, author } = req.body;
+  // console.log(req.body);
   if (!title || !description || !category || !author) {
     throw new Error("Every field is required");
   } else {
@@ -24,7 +26,7 @@ const createPost = asyncHandler(async (req, res) => {
       },
     });
     if (!post) {
-      throw new Error("Post uploading failed");
+      res.status(500).send(new CustomError("Post creation failed"));
     } else {
       res.status(200).send(new ApiResponse(200, post));
     }
@@ -38,17 +40,31 @@ const getPosts = asyncHandler(async (req, res) => {
 const getPostByCategory = asyncHandler(async (req, res, next) => {
   try {
     const cat = req.params;
-    const posts = await Post.find({ category: cat.category }).populate(
-      "author",
-      "img fullName"
-    );
-    if (!posts.length) {
-      res.status(200).send(new ApiResponse(200, { message: "No posts" }));
-    } else {
+    console.log();
+
+    if (cat.category === "For you") {
+      const posts = await Post.find().populate("author", "img fullName");
       res.status(200).send(new ApiResponse(200, posts));
+    } else {
+      const posts = await Post.find({ category: cat.category }).populate(
+        "author",
+        "img fullName"
+      );
+      if (!posts.length) {
+        res.status(200).send(new ApiResponse(200, []));
+      } else {
+        res.status(200).send(new ApiResponse(200, posts));
+      }
     }
   } catch (error) {
     next(error);
   }
 });
-export { createPost, getPosts, getPostByCategory };
+const getPostById = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  // console.log(id);
+  const post = await Post.findById(id).populate("author", "img fullName");
+  // console.log(post);
+  res.status(200).send(new ApiResponse(200, { post }));
+});
+export { createPost, getPosts, getPostByCategory, getPostById };

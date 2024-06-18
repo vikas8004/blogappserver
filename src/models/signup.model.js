@@ -15,9 +15,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    role: {
-      type: String,
-    },
     img: {
       public_id: {
         type: String,

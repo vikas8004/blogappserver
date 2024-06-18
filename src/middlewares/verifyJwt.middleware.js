@@ -4,6 +4,7 @@ const verifyJwt = async (req, res, next) => {
     const token =
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
+      // console.log(req.cookies);
 
     if (!token) {
       throw new Error("authorization failed");
