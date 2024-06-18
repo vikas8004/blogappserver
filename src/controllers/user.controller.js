@@ -67,9 +67,9 @@ const login = asyncHandler(async (req, res) => {
         const token = await generateJwt(user._id);
         const options = {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
           maxAge: 86400000, // 1 day
-          sameSite: 'Lax', // Prevent CSRF
+          sameSite: 'None', // Prevent CSRF
         };
         res
           .cookie("accessToken", token, options)
@@ -83,9 +83,9 @@ const logout = asyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     maxAge: 0, // 1 day
-    sameSite: 'Lax', // Prevent CSRF
+    sameSite: 'None', // Prevent CSRF
   };
   res.clearCookie("accessToken", options).status(200).send(new ApiResponse(200,{message:`${req.user.fullName} is logout successfully`}));
 });
