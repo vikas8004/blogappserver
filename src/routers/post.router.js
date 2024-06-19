@@ -4,6 +4,7 @@ import {
   createPost,
   getPostByCategory,
   getPostById,
+  getPostForUser,
   getPosts,
 } from "../controllers/post.controller.js";
 import verifyJwt from "../middlewares/verifyJwt.middleware.js";
@@ -15,5 +16,6 @@ postRouter
 postRouter.route("/posts").get(getPosts);
 postRouter.route("/posts/:category").get(getPostByCategory);
 postRouter.route("/post/:id").get(getPostById);
+postRouter.route("/postforuser").post(getPostForUser)
 
 export default postRouter;

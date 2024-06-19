@@ -67,4 +67,11 @@ const getPostById = asyncHandler(async (req, res) => {
   // console.log(post);
   res.status(200).send(new ApiResponse(200, { post }));
 });
-export { createPost, getPosts, getPostByCategory, getPostById };
+const getPostForUser = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+  // console.log(id);
+  const posts = await Post.find({ author: id }).populate("author", "fullName img");
+  // console.log(posts);
+  res.status(200).send(new ApiResponse(200, posts));
+});
+export { createPost, getPosts, getPostByCategory, getPostById, getPostForUser };
